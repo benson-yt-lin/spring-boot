@@ -1,0 +1,93 @@
+
+apiVersion: v1
+kind: ImageStream
+metadata:
+  name: spring-boot
+  labels:
+    app: spring-boot
+spec:
+  dockerImageRepositoy: harbor.bot.com.tw/linuxone/camel/spring-boot
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations: null
+    from:
+      kind: DockerImage
+      name: harbor.bot.com.tw/linuxone/camel/spring-boot:latest
+    importPolicy:
+      scheduled: true
+    name: latest
+    referencePolicy:
+      type: Source
+
+---
+
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: spring-boot
+  name: spring-boot
+spec:
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 1
+  resources:
+    limits:
+      cpu: "600m"
+      memory: "512Mi"
+  output:
+    to:
+      kind: DockerImage
+      name: harbor.bot.com.tw/linuxone/camel/spring-boot:latest
+    ## BINARY BUILD
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/benson-yt-lin/spring-boot
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: openjdk-11:1.10-1
+        namespace: camel
+      type: Source
+      env:
+      - name: "BUILD_LOGLEVEL"
+        value: "3"
+      forcePull: true
+  triggers: []
+    # - imageChange: {}
+    #   type: ImageChange
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: The application's http port.
+  labels:
+    app: spring-boot
+  name: spring-boot
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    deploymentConfig: spring-boot
+
+---
+
+apiVersion: v1
+name: spring-boot
+kind: Route
+metadata:
+  annotations:
+    description: Route for application's http service.
+  labels:
+    app: spring-boot
+  name: spring-boot
+spec:
+  host: 
+  to:
+    name: spring-boot
