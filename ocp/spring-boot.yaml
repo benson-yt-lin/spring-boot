@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         app: spring-boot
+        deploymentConfig: spring-boot
       name: spring-boot
     spec:
       containers:
@@ -28,24 +29,24 @@ spec:
             value: Asia/Taipei
           - name: LANG
             value: en_US.UTF-8
-          - name: PROFILE
-            value: ${PROFILE}
-          - name: SERVER_PORT
-            value: ${SERVER_PORT}
-          - name: REDIS_IP
-            value: ${REDIS_IP}
-          - name: REDIS_PORT
-            value: ${REDIS_PORT}
-          - name: REDIS_PASSWORD
-            value: ${REDIS_PASSWORD}
-          - name: JAVA_OPTIONS
-            value: ${JAVA_OPTIONS}
-          - name: GC_MAX_METASPACE_SIZE
-            value: ${GC_MAX_META_SIZE}
-          - name: JAVA_MAX_MEM_RATIO
-            value: ${JAVA_MAX_MEM_RATIO}
-          - name: JAVA_TOOL_OPTIONS
-            value: ${JAVA_TOOL_OPTIONS}
+          # - name: PROFILE
+          #   value: ${PROFILE}
+          # - name: SERVER_PORT
+          #   value: ${SERVER_PORT}
+          # - name: REDIS_IP
+          #   value: ${REDIS_IP}
+          # - name: REDIS_PORT
+          #   value: ${REDIS_PORT}
+          # - name: REDIS_PASSWORD
+          #   value: ${REDIS_PASSWORD}
+          # - name: JAVA_OPTIONS
+          #   value: ${JAVA_OPTIONS}
+          # - name: GC_MAX_METASPACE_SIZE
+          #   value: ${GC_MAX_META_SIZE}
+          # - name: JAVA_MAX_MEM_RATIO
+          #   value: ${JAVA_MAX_MEM_RATIO}
+          # - name: JAVA_TOOL_OPTIONS
+          #   value: ${JAVA_TOOL_OPTIONS}
           - name: POD_NAME
             valueFrom:
               fieldRef:
